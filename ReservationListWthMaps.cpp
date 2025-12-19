@@ -59,29 +59,28 @@ void ReservationList::displayReservations()
 		}
 	}
 }
-// It's probably a good idea to let the user extend their reservation
-// if they interfere with their reservation
-/*
-bool ReservationList::doesCollide(Reservation potentialRes)
+
+bool ReservationList::validTimes(Reservation potentialRes)
 {
 	int checkId;
 
 	checkId = potentialRes.getID();
 	Dates wantedDates = potentialRes.getResPeriod();
 
-
-	//scheduling must look like {}[] or []{}, not [{]}, {[}], [{}], or {[]}
+	int wantedStartInt = wantedDates.startDay + wantedDates.startMonth * 100 + wantedDates.startYear * 10000;
+	int wantedEndInt = wantedDates.dueDay + wantedDates.dueMonth * 100 + wantedDates.dueYear * 10000;
 
 	for (auto times : logByID[checkId])
 	{
-		// ALL starts and ends must be greater than or less than the start/end of the other
 		Dates setDates = times.getResPeriod();
+		int setStartInt = setDates.startDay + setDates.startMonth * 100 + setDates.startYear * 10000;
+		int setEndInt = setDates.dueDay + setDates.dueMonth * 100 + setDates.dueYear * 10000;
 
-		// checking for reservations that start while the other thing is reserved
-		if(wantedDates.startDay <= setDates.dueYear && wantedDates.startMonth <= setDates)
+		if (!(setEndInt < wantedStartInt || setStartInt > wantedEndInt))
+			return false;
 		
 	}
 
-	return false;
+	return true;
 }
-*/
+
