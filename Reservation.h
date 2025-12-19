@@ -1,25 +1,34 @@
 #pragma once
+
 #include <string>
 using namespace std;
+
+struct dates
+{
+	int startDay;
+	int dueDay;
+
+	int startMonth;
+	int dueMonth;
+
+	int startYear;
+	int dueYear;
+};
 
 class Reservation
 {
 private:
 	int resourceID;
-	string username;
-	pair<double, double> reservationTime;
-	// I'm not sure what we're doing here, but any
-	// set up is gonna be easy to change. But
-	// the current placeholder won't work
+	string username; 
+	dates resPeriod;
 public:
-	Reservation(int, string, pair<double, double>);
-
-	void setResourceID(int);
+	Reservation(int ID, string username, dates resPeriod);
+	void setID(int);
 	void setUsername(string);
-	void setReservation(pair<double, double>);
+	void setResPeriod(dates newPeriod);
 
-	int getResourceID() const;
+	int getID() const;
 	string getUsername() const;
-	pair<double,double> getReservation() const;
+	dates getResPeriod() const;
 };
 
