@@ -1,26 +1,25 @@
 #include "Reservation.h"
 
-Reservation::Reservation(int newID, string newUsername, pair<double, double> newReservation)
+Reservation::Reservation(int setID, string setUsername, dates setResPeriod)
 {
-	resourceID = newID;
-	username = newUsername;
-	reservationTime = newReservation;
+	resourceID = setID;
+	username = setUsername;
+	resPeriod = setResPeriod;
 }
 
-void Reservation::setResourceID(int newID)
+void Reservation::setID(int setID)
 {
-	resourceID = newID;
+	resourceID = setID;
 }
-void Reservation::setUsername(string newUsername)
+void Reservation::setUsername(string setUsername)
 {
-	username = newUsername;
+	username = setUsername;
 }
-void Reservation::setReservation(pair<double, double> newReservation)
+void Reservation::setResPeriod(dates setResPeriod)
 {
-	reservationTime = newReservation;
+	resPeriod = setResPeriod;
 }
-
-int Reservation::getResourceID() const
+int Reservation::getID() const
 {
 	return(resourceID);
 }
@@ -28,7 +27,7 @@ string Reservation::getUsername() const
 {
 	return(username);
 }
-pair<double, double> Reservation::getReservation() const
+dates Reservation::getResPeriod() const
 {
-	return(reservationTime);
+	return(resPeriod);
 }
