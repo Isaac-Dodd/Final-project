@@ -1,17 +1,20 @@
 #pragma once
+
 #include "Reservation.h"
 #include <vector>
 #include <fstream>
+#include <unordered_map>
 
 class ReservationList
 {
 private:
+	// This variable holds all the reservations
 	vector<Reservation> currentReservations;
-	bool succesfulLoad;
+	// This variable hold the reservations by ID, useful
+	// for detecting collisions
+	unordered_map<int, vector<Reservation> > logByID;
 public:
 	ReservationList();
-	void createReservation(int, string, pair<double, double>);
-	void cancelReservation(int ID);
-	bool isConflict();
+	//bool doesCollide(Reservation);
 };
 
