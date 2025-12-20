@@ -1,33 +1,41 @@
-#pragma once
-#include "Resource.h"
+#include "StudyRoom.h"
 
-/*
-* I would change the available hours to ints for the 
-* opening hour and minute, and the closing hour and
-* minute. Then a string for am and pm
-* 
-* I also never set up the virtual. I don't know what
-* you want outputted
-*/
-
-class StudyRoom : public Resource
+StudyRoom::StudyRoom(int setID, string setName, bool setChecked,
+	int newCapacity, string setLocation, string setHours)
+	: Resource(setID, setName, setChecked)
 {
-private:
-	int capacity;
-	string availableHours;
-	string location;
-private:
-	StudyRoom(int setID, string setName, bool setChecked, 
-		int newCapacity, string setLocation, string setHours);
+	capacity = newCapacity;
+	location = setLocation;
+	availableHours = setHours;
+}
 
-	void setLocation(string setLocation);
-	void setAvailabilityHours(string setHours);
-	void setCapacity(int newCapacity);
-	
-	string getLocation() const;
-	string getAvailabilityHour() const;
-	int getCapacity() const;
+void StudyRoom::setCapacity(int newCapacity)
+{
+	capacity = newCapacity;
+}
+void StudyRoom::setLocation(string setLocation)
+{
+	location = setLocation;
+}
+void StudyRoom::setAvailabilityHours(string setHours)
+{
+	availableHours = setHours;
+}
 
-	virtual void getResourceSpecifics();
-};
+string StudyRoom::getLocation() const
+{
+	return(location);
+}
+string StudyRoom::getAvailabilityHour() const
+{
+	return(availableHours);
+}
+int StudyRoom::getCapacity() const
+{
+	return(capacity);
+}
 
+void StudyRoom::getResourceSpecifics()
+{
+
+}
