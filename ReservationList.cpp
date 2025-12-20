@@ -32,10 +32,75 @@ ReservationList::ReservationList()
 		getline(myStream, endMonth, ',');
 		getline(myStream, endYear, '\n');
 		
-		currentReservations.push_back({ stoi(ID),username,
-			dates{stoi(startDay),stoi(startMonth),stoi(startYear),stoi(endDay),stoi(endMonth),stoi(endYear)} });
 		
 		logByID[stoi(ID)].push_back( Reservation({ stoi(ID),username,
-			dates{stoi(startDay),stoi(startMonth),stoi(startYear),stoi(endDay),stoi(endMonth),stoi(endYear)} }) );
+			Dates{stoi(startDay),stoi(startMonth),stoi(startYear),stoi(endDay),stoi(endMonth),stoi(endYear)} }) );
+	}
+}
+
+void ReservationList::createReservation(Reservation newReservation)
+{
+	logByID[newReservation.getID()].push_back(newReservation);
+}
+
+void ReservationList::cancelReservation(Reservation endReservation)
+{
+	auto myTem = find(logByID[endReservation.getID()].begin(), logByID[endReservation.getID()].end(), endReservation);
+	logByID[endReservation.getID()].erase(myTem);
+}
+
+void ReservationList::displayReservations()
+{
+	for (auto reservationbyID : logByID)
+	{
+		for (auto individualRes : reservationbyID.second)
+		{
+			// outputting all the mapped values
+		}
+	}
+}
+
+bool ReservationList::validTimes(Reservation potentialRes)
+{
+	int checkId;
+
+	checkId = potentialRes.getID();
+	Dates wantedDates = potentialRes.getResPeriod();
+
+	int wantedStartInt = wantedDates.startDay + wantedDates.startMonth * 100 + wantedDates.startYear * 10000;
+	int wantedEndInt = wantedDates.dueDay + wantedDates.dueMonth * 100 + wantedDates.dueYear * 10000;
+
+	for (auto times : logByID[checkId])
+	{
+		Dates setDates = times.getResPeriod();
+		int setStartInt = setDates.startDay + setDates.startMonth * 100 + setDates.startYear * 10000;
+		int setEndInt = setDates.dueDay + setDates.dueMonth * 100 + setDates.dueYear * 10000;
+
+		// if it doesn't not overlap then there's overlap
+		if (!(setEndInt < wantedStartInt || setStartInt > wantedEndInt))
+			return false;
+		
+	}
+
+	return true;
+}
+
+ReservationList::~ReservationList()
+{
+	fstream myStream("Reservations.txt", ios::out);
+
+	for (auto indReservation : logByID)
+	{
+		for (auto reservationData : indReservation.second)
+		{
+		myStream << indReservation.first << ',';
+		myStream << reservationData.getUsername() << ',';
+		myStream << reservationData.getResPeriod().startDay << ',';
+		myStream << reservationData.getResPeriod().startMonth << ',';
+		myStream << reservationData.getResPeriod().startYear << ',';
+		myStream << reservationData.getResPeriod().dueDay << ',';
+		myStream << reservationData.getResPeriod().dueMonth << ',';
+		myStream << reservationData.getResPeriod().dueYear << endl;
+		}
 	}
 }
