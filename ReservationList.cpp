@@ -36,6 +36,8 @@ ReservationList::ReservationList()
 		logByID[stoi(ID)].push_back( Reservation({ stoi(ID),username,
 			Dates{stoi(startDay),stoi(startMonth),stoi(startYear),stoi(endDay),stoi(endMonth),stoi(endYear)} }) );
 	}
+
+	myStream.close();
 }
 
 void ReservationList::createReservation(Reservation newReservation)
@@ -89,10 +91,17 @@ ReservationList::~ReservationList()
 {
 	fstream myStream("Reservations.txt", ios::out);
 
+	bool first = true;
+
 	for (auto indReservation : logByID)
 	{
 		for (auto reservationData : indReservation.second)
 		{
+		// Need this to not add a \n to the end of the file
+		if (!first)
+			myStream << "\n";
+		first = false;
+
 		myStream << indReservation.first << ',';
 		myStream << reservationData.getUsername() << ',';
 		myStream << reservationData.getResPeriod().startDay << ',';
@@ -100,7 +109,7 @@ ReservationList::~ReservationList()
 		myStream << reservationData.getResPeriod().startYear << ',';
 		myStream << reservationData.getResPeriod().dueDay << ',';
 		myStream << reservationData.getResPeriod().dueMonth << ',';
-		myStream << reservationData.getResPeriod().dueYear << endl;
+		myStream << reservationData.getResPeriod().dueYear;
 		}
 	}
 }
