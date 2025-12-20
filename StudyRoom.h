@@ -1,30 +1,36 @@
-
-#ifndef STUDYROOM_H_
-#define STUDYROOM_H_
+#pragma once
 #include "Resource.h"
-class StudyRoom : public Resource{
+
+/*
+* I would change the available hours to ints for the 
+* opening hour and minute, and the closing hour and
+* minute. Then a string for am and pm
+* 
+* I also never set up the virtual. I don't know what
+* you want outputted
+*
+* If you wanna readd the whiteboard bool go for it
+* it's not on the UML though
+*/
+
+class StudyRoom : public Resource
+{
 private:
 	int capacity;
-	bool whiteBoard;
-public:
-	StudyRoom(int id,string n, string l, pair<double,double>a, bool co,
-			  int c, bool wb):
-			  Resource(id, n, l, a, co),
-			  capacity(c), whiteBoard(wb) {}
-	~StudyRoom();
+	string availableHours;
+	string location;
+private:
+	StudyRoom(int setID, string setName, bool setChecked, 
+		int newCapacity, string setLocation, string setHours);
 
-	int getCapacity(){return capacity;}
-	bool hasWhiteBoard(){return whiteBoard;}
+	void setLocation(string setLocation);
+	void setAvailabilityHours(string setHours);
+	void setCapacity(int newCapacity);
+	
+	string getLocation() const;
+	string getAvailabilityHour() const;
+	int getCapacity() const;
 
-	void setCapacity(int c){capacity = c;}
-	void setWhiteBoard(bool wb){whiteBoard = wb;}
-
-	void getResourceSpecifics()const
-	{
-		cout << "Capacity: " << capacity << " persons\n"
-			 << "Has white board: ";
-		if(whiteBoard) cout << "Yes\n";
-		else cout << "No\n";
-	}
+	virtual void getResourceSpecifics();
 };
-#endif
+
