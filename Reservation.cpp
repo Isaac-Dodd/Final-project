@@ -44,7 +44,7 @@ bool Reservation::operator==(const Reservation& rightside) const
 	}
 	else if (!(resPeriod == rightside.resPeriod))
 	{
-
+		return false;
 	}
 	else
 	{
