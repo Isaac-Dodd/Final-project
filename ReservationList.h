@@ -20,7 +20,8 @@ public:
 	bool validTimes(Reservation potentialRes);
 	void displayReservations();
 
-	~ReservationList();
+	vector<Reservation> getByUsername(string);
 
+	~ReservationList();
 };
 
