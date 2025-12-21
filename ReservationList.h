@@ -15,13 +15,12 @@ private:
 public:
 	ReservationList();
 	void createReservation(Reservation newReservation);
-	void cancelReservation(Reservation endReservation);
-	
-	bool validTimes(Reservation potentialRes);
-	void displayReservations();
+	void cancelReservation(Reservation removeReservation);
 
+	bool nonConflict(Reservation potentialRes);
+
+	vector<Reservation> getById(int);
 	vector<Reservation> getByUsername(string);
 
 	~ReservationList();
 };
-
