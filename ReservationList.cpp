@@ -13,6 +13,17 @@ ReservationList::ReservationList()
 	string endMonth;
 	string endYear;
 
+	int loadEndTime;
+
+	time_t t = time(nullptr);
+	tm now{};
+	localtime_s(&now, &t);  // MSVC-safe version
+	int year = now.tm_year + 1900;
+	int month = now.tm_mon + 1;
+	int day = now.tm_mday;
+
+	int today = day + month * 100 + year * 10000;
+
 	if (!myStream.is_open())
 	{
 		return;
@@ -32,12 +43,17 @@ ReservationList::ReservationList()
 		getline(myStream, endMonth, ',');
 		getline(myStream, endYear, '\n');
 		
-		
+		loadEndTime = stoi(endDay) + stoi(endMonth) * 100 + stoi(endYear) * 10000;
+
+		if (today <= loadEndTime)
+		{
 		logByID[stoi(ID)].push_back( Reservation({ stoi(ID),username,
 			Dates{stoi(startDay),stoi(startMonth),stoi(startYear),stoi(endDay),stoi(endMonth),stoi(endYear)} }) );
+		}
 	}
 
 	myStream.close();
+
 }
 
 void ReservationList::createReservation(Reservation newReservation)
@@ -87,6 +103,23 @@ bool ReservationList::validTimes(Reservation potentialRes)
 	return true;
 }
 
+
+vector<Reservation> ReservationList::getByUsername(string wantedUsername)
+{
+	vector<Reservation> returnVec;
+
+	for (auto reservationVec : logByID)
+	{
+		for (auto indReservation : reservationVec.second)
+		{
+			if (indReservation.getUsername() == wantedUsername)
+				returnVec.push_back(indReservation);
+		}
+	}
+
+	return(returnVec);
+}
+
 ReservationList::~ReservationList()
 {
 	fstream myStream("Reservations.txt", ios::out);
@@ -113,3 +146,4 @@ ReservationList::~ReservationList()
 		}
 	}
 }
+
