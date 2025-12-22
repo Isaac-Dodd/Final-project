@@ -1,42 +1,20 @@
-#ifndef STORAGE_H_
-#define STORAGE_H_
+#pragma once
 #include "Resource.h"
-
-class Storage {
+#include "StudyRoom.h"
+#include "TutoringSession.h"
+#include <vector>
+class Storage
+{
 private:
-	vector<Resource*> storage;
-	unordered_map<int, bool> checkedOutIds;
-
+	vector<Resource*> allResources;
+	
 public:
 	Storage();
-	~Storage();
-	void listResources()
-	{
-		for(auto& i : storage)
-		{
-			i.getResourceSpecifics();
-		}
-	}
-
-	void addResources(Resource* resource)
-	{
-		storage.push_back(resource);
-	}
-
-	void removeResources(Resource* resource)
-	{
-		auto it = find(storage.begin(), storage.end(), resource);
-		storage.erase(it);
-	}
-
-	void listReservations();
-	bool uniqueId(int id)
-	{
-		// if id exists return false
-		if(checkedOutIds.count(id)) return false;
-		return true;
-	}
+	void printAll() const;
+	Resource* getResource(int id);
+	
+	//Admin Commands
+	void addResource(Resource* newResource);
+	void removeResource(Resource* removeResource);
+	vector<Resource*> passAll();
 };
-
-#endif
-

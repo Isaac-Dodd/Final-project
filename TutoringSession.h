@@ -1,29 +1,23 @@
-
-#ifndef TUTORINGSESSION_H_
-#define TUTORINGSESSION_H_
+#pragma once
 #include "Resource.h"
-class TutoringSession : public Resource{
-private:
-	string tutor;
-	string subject;
+class TutoringSession :public Resource
+{
+	public: 
+		TutoringSession(int setID, string setName, string location, string tutorName, pair<int, int> hours);
+		string getTutorName();
+		string getLocation();
+		
+		void setTutorName(string name);
+		void setLocation(string locale);
+		
+		
+		string getResourceType();
+		void getResourceSpecifics() const;
+		//void setResourceSpecifics(string tutorName, );
 
-public:
-	TutoringSession(int id, string n, string l, pair<double,double>a, bool co,
-					string t, string s):
-					Resource(id, n, l, a, co),
-					tutor(t), subject(s){}
-	virtual ~TutoringSession();
-
-	string getTutor(){return tutor;}
-	string getSubject(){return subject;}
-
-	void setTutor(string t){tutor = t;}
-	void setSubject(string s){subject = s;}
-
-	void getResourceSpecifics()const
-		{
-			cout << "Tutor: " << tutor << endl
-				 << "Subject: " << subject << endl;
-		}
+	private:
+		string tutorName;
+		string location;
+		string resourceType = "TutoringSession";
 };
-#endif
+

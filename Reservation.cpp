@@ -51,3 +51,23 @@ bool Reservation::operator==(const Reservation& rightside) const
 	return true;
 	}
 }
+
+ostream& operator <<(ostream& out, const Reservation& item)
+{
+	Dates reservedTime = item.getResPeriod();
+
+	out << item.getUsername() << " " << item.getID() << endl
+
+		<< "Start:\n"
+		<< reservedTime.startHour << ":" << reservedTime.startMinute
+		<< " " << reservedTime.startMonth << '-' << reservedTime.startDay
+		<< '-' << reservedTime.startYear << endl
+
+
+		<< "Ends:\n"
+		<< reservedTime.endHour << ":" << reservedTime.endMinute
+		<< " " << reservedTime.endMonth << '-' << reservedTime.endDay
+		<< '-' << reservedTime.endYear << endl;
+
+	return(out); 
+}

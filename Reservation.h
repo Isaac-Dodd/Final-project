@@ -1,14 +1,15 @@
 #pragma once
-#include "Dates.h"
+
+#include <iostream>
 #include <string>
+#include "Dates.h"
 using namespace std;
-
-
 
 class Reservation
 {
 private:
 	int resourceID;
+	// tie to the user eventually
 	string username; 
 	Dates resPeriod;
 public:
@@ -22,5 +23,6 @@ public:
 	Dates getResPeriod() const;
 
 	bool operator==(const Reservation& rightside) const;
-};
 
+	friend ostream& operator <<(ostream& out, const Reservation& item);
+};

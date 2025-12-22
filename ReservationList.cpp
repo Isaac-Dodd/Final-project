@@ -1,6 +1,5 @@
 #include "ReservationList.h"
 
-
 ReservationList::ReservationList()
 {
 	fstream myStream("Reservations.txt", ios::in);
@@ -24,7 +23,6 @@ ReservationList::ReservationList()
 	time_t t = time(nullptr);
 	tm now{};
 	localtime_s(&now, &t);
-
 
 	int year = now.tm_year + 1900;
 	int month = now.tm_mon + 1;
@@ -75,7 +73,7 @@ ReservationList::ReservationList()
 	myStream.close();
 }
 
-	// 1234,idodd0,30,4,20,4,2025,30,5,21,4,2026
+// 1234,idodd0,30,4,20,4,2025,30,5,21,4,2026
 
 void ReservationList::createReservation(Reservation newReservation)
 {
@@ -88,7 +86,22 @@ void ReservationList::cancelReservation(Reservation removeReservation)
 	logByID[removeReservation.getID()].erase(myTem);
 }
 
+void ReservationList::cancelID(int id)
+{
+	logByID.erase(id);
+}
 
+void ReservationList::printAll()const
+{
+	for(auto& i : logByID)
+	{
+		cout << "Reservations for resource " << i.first << ": \n";
+		for(auto& j : i.second)
+		{
+			cout << j;
+		}
+	}
+}
 
 bool ReservationList::nonConflict(Reservation potentialRes)
 {
@@ -116,7 +129,7 @@ bool ReservationList::nonConflict(Reservation potentialRes)
 }
 
 
-vector<Reservation> ReservationList::getByUsername(string wantedUsername)
+vector<Reservation> ReservationList::getByUsername(string wantedUsername) const
 {
 	vector<Reservation> returnVec;
 
@@ -137,6 +150,19 @@ vector<Reservation> ReservationList::getById(int wantedID)
 	return(logByID[wantedID]);
 }
 
+vector<Reservation> ReservationList::passAll() const
+{
+	vector<Reservation> storedReservations;
+	for (auto item : logByID)
+	{
+		for (auto reservation : item.second)
+		{
+			storedReservations.push_back(reservation);
+		}
+	}
+	return(storedReservations);
+}
+
 ReservationList::~ReservationList()
 {
 	fstream myStream("Reservations.txt", ios::out);
@@ -154,12 +180,12 @@ ReservationList::~ReservationList()
 
 			myStream << indReservation.first << ',';
 			myStream << reservationData.getUsername() << ',';
-			myStream << reservationData.getResPeriod().startMinute<< ',';
+			myStream << reservationData.getResPeriod().startMinute << ',';
 			myStream << reservationData.getResPeriod().startHour << ',';
 			myStream << reservationData.getResPeriod().startDay << ',';
 			myStream << reservationData.getResPeriod().startMonth << ',';
 			myStream << reservationData.getResPeriod().startYear << ',';
-			myStream << reservationData.getResPeriod().endMinute << ','; 
+			myStream << reservationData.getResPeriod().endMinute << ',';
 			myStream << reservationData.getResPeriod().endHour << ',';
 			myStream << reservationData.getResPeriod().endDay << ',';
 			myStream << reservationData.getResPeriod().endMonth << ',';
