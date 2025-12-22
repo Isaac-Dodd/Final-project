@@ -25,6 +25,7 @@ class StudyRoom : public Resource
 
 		void getResourceSpecifics() const;
 		string getResourceType();
+		string getSaveSpecifics();
 	private:
 		string location;
 		int capacity;

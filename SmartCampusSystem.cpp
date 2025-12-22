@@ -2,8 +2,8 @@
 
 SmartCampusSystem::SmartCampusSystem()
 {
-	currentReservations = ReservationList();
-    currentStorage = Storage();
+	//currentReservations = ReservationList();
+    //currentStorage = Storage();
 
     for(auto& i : currentStorage.passAll())
     {
@@ -11,25 +11,35 @@ SmartCampusSystem::SmartCampusSystem()
     }
 }
 
-void SmartCampusSystem::listResources() const
-{
-	
-}
 
 bool SmartCampusSystem::availableID(int wantedID)
 {
 	return !usedIds[wantedID];
 }
 
-void SmartCampusSystem::removeResources(int id)
+void SmartCampusSystem::removeResources(Resource* removeResource)
 {
+	int id = removeResource->getId();
 	currentReservations.cancelID(id);
 	usedIds[id] = false;
+
+	auto item = find(currentStorage.passAll().begin(), currentStorage.passAll().end(), removeResource);
+	currentStorage.passAll().erase(item);
+}
+void SmartCampusSystem::addResource(Resource* newResource)
+{
+	currentStorage.passAll().push_back(newResource);
+	usedIds[newResource->getId()] = true;
 }
 
 void SmartCampusSystem::removeReservation(Reservation wantRemoved)
 {
 	currentReservations.cancelReservation(wantRemoved);
+}
+
+void SmartCampusSystem::takeID(int ID)
+{
+	usedIds[ID] = true;
 }
 
 //void SmartCampusSystem::printUserReservations(Student currentStudent) const

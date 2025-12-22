@@ -3,7 +3,7 @@
 
 Storage::Storage()
 {
-	fstream myStream("Reservation.txt", ios::in);
+	fstream myStream("Resources.txt", ios::in);
 	string id;
 	string name;
 	//string checkedOut = 0;
@@ -31,8 +31,8 @@ Storage::Storage()
 		getline(myStream, resourceType, '|');
 		if (resourceType == "TutoringSession")
 		{
-			getline(myStream, tutorName, '|');
 			getline(myStream, location, '|');
+			getline(myStream, tutorName, '|');
 			getline(myStream, availableHours, '\n');
 			
 			// {10, 17}
@@ -51,13 +51,13 @@ Storage::Storage()
 			end = stoi(temp);
 			pair<int, int> hours = {start, end};
 			
-			allResources.push_back(new TutoringSession(stoi(id), name, tutorName, location, hours));
+			allResources.push_back(new TutoringSession(stoi(id), name, location, tutorName, hours));
 		}
 		else if (resourceType == "StudyRoom")
 		{
-			getline(myStream, availableHours, '|');
 			getline(myStream, location, '|');
-			getline(myStream, capacity, '\n');
+			getline(myStream, capacity, '|');
+			getline(myStream, availableHours, '\n');
 			// {10, 17}
 			string temp = "";
 			int start, end;
@@ -73,7 +73,7 @@ Storage::Storage()
 			}
 			end = stoi(temp);
 			pair<int, int> hours = { start, end };
-			allResources.push_back(new StudyRoom(stoi(id), name,location, stoi(capacity), hours));
+			allResources.push_back(new StudyRoom(stoi(id), name, location, stoi(capacity), hours));
 		}
 		
 	}
@@ -81,25 +81,18 @@ Storage::Storage()
 	myStream.close();
 }
 
-void Storage::addResource(Resource* newResource)
-{
-	allResources.push_back(newResource);
-}
+
 
 void Storage::printAll() const
 {
 	for (auto item : allResources)
 	{
-		cout << *item;
+		cout << *item << endl << endl;
 	}
 }
 
 
-void Storage::removeResource(Resource* removeResource)
-{
-	auto item = find(allResources.begin(), allResources.end(), removeResource);
-	allResources.erase(item);
-}
+
 
 Resource* Storage::getResource(int resourceId)
 {
@@ -111,7 +104,31 @@ Resource* Storage::getResource(int resourceId)
 	return nullptr;
 }
 
-vector<Resource*> Storage::passAll()
+vector<Resource*>& Storage::passAll()
 {
 	return(allResources);
+}
+
+Storage::~Storage()
+{
+	fstream myStream("Resources.txt", ios::out);
+
+	bool first = true;
+
+	for (auto indResource: allResources)
+	{
+			// Need this to not add a \n to the end of the file
+			if (!first)
+				myStream << "\n";
+			first = false;
+
+			
+			myStream << indResource->getId() << '|'
+					 << indResource->getName() << '|'
+					 << indResource->getResourceType() << '|'
+					 << indResource->getSaveSpecifics()
+					 << "{" << indResource->getAvailability().first << "," << indResource->getAvailability().second << "}";
+	}
+
+	myStream.close();
 }

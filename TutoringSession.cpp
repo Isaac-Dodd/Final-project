@@ -5,7 +5,7 @@ TutoringSession::TutoringSession(int setId, string setName, string location,
 	string name, pair<int, int> hours) : Resource(setId, setName, hours)
 {
 	tutorName = name;
-	location = location;
+	this->location = location;
 }
 
 string TutoringSession::getTutorName()
@@ -37,6 +37,11 @@ void TutoringSession::getResourceSpecifics() const
 		 << "Available Hours: " << hours.first << " to " << hours.second << endl;
 }
 
+string TutoringSession::getSaveSpecifics()
+{
+	string temp = location + "|" + tutorName + "|";
+	return temp;
+}
 string TutoringSession::getResourceType()
 {
 	return "TutoringSession";

@@ -2,4 +2,4 @@ Scott|Admin
 Isaac|Student
 James|Student
 Lawrence|Student
-AIman|Student
+Aiman|Student

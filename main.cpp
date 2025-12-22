@@ -25,11 +25,15 @@ X Detecting collisions
 X Saving and loading data
 */
 
-void viewUpcoming(SmartCampusSystem& system, User* user);
+/* ============ ERRORS ================
+* Exception handle the chars in the options
+*/
+
+
 void cancelReservationMenu(SmartCampusSystem& system, User* user);
 void viewReservationMenu(SmartCampusSystem& system, User* user);
 Resource* createResource(SmartCampusSystem& system);
-Resource* destroyResource(SmartCampusSystem& system);
+void destroyResource(SmartCampusSystem& system);
 void createReservationMenu(SmartCampusSystem& system, User* studentUser);
 void studentMenu(SmartCampusSystem& system, User* studentUser);
 void adminMenu(SmartCampusSystem& system);
@@ -37,41 +41,18 @@ void adminMenu(SmartCampusSystem& system);
 int main()
 {
     SmartCampusSystem system;
-    //              id      name        location capacity  available hours
-    StudyRoom room1(1234, "Eagle Room", "West Wing", 4, { 12, 19 });
-    //                   id       name          tutor   location      available hours
-    TutoringSession sesh1(1235, "Penguin Room", "North Wing", "Issac", { 8, 17 });
-
-    (system.getStorage())->addResource(&room1);
-    (system.getStorage())->addResource(&sesh1);
-
-    /*Student scott("scott");
-    Student issac("issac");
-    Student james("james");
-    Student lawrence("lawrence");
-    Admin   homi("homi");*/
-
     UserList theList;
-    /* theList.allUsers.push_back(scott&);
-     theList.allUsers.push_back(issac&);
-     theList.allUsers.push_back(james&);
-     theList.allUsers.push_back(lawrence&);
-     theList.allUsers.push_back(homi&);*/
-
     string  username;
-    //    while (option != 0)
-    //{
-    //    // cout << "-----Smart Campus System-----\n";
-    //    // cout << "1. Student\n";
-    //    // cout << "2. Admin\n";
-    //    // cout << "0. Exit\n";
-    //    // cin >> option;
+    
     while (true)
     {
         try
         {
-            cout << "Please enter your username: ";
+            cout << "Please enter your username(enter \"0\" to save and end the program): ";
             getline(cin, username);
+
+            if (username == "0")
+                return 0;
 
             if (!theList.isInList(username))
             {
@@ -94,87 +75,69 @@ int main()
         catch (runtime_error& string)
         {
             cin.clear();
+            std::system("cls");
             cerr << "Error: " << string.what() << endl
                 << "Press enter to continue...";
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
-    // switch (option){
-    //     case 1:
-    //         string username;
-    //         cout << "Enter username: ";
-    //         cin >> username;
-    //         studentMenu(system, username);
-    //         break;
-    //     case 2:
-    //         adminMenu(system);
-    //     case 0:
-    //         break;
-    //     default:
-    //     // }
 
-
-}
-
-void viewUpcoming(SmartCampusSystem& system, User* user)
-{
-    vector<Reservation> userRes = system.getByUser(user);
-
-    if (userRes.empty())
-        cout << "\nNothing to display\n";
-
-    else
-        for (auto indReservation : userRes)
-            cout << indReservation << endl;
+    return 0;
 }
 
 void cancelReservationMenu(SmartCampusSystem& system, User* user)
 {
     // display numbered reservations owned by the user
     // pass back which one to cancel
-    vector<Reservation> userReservations = system.getByUser(user);
-    int reservationCount = 0;
+    //vector<Reservation> userReservations = system.getByUser(user);
+    //int reservationCount = 0;
     int wantedDeleted;
 
     while (true)
     {
         try
         {
-        cout << "Which reservation do you want to cancel (Enter 0 to exit)\n";
-        for (auto indReservation : userReservations)
-        {
-            ++reservationCount;
-            cout << "Reservation #" << reservationCount << endl;
-            cout << indReservation;
-        }
-        
-            cin >> wantedDeleted;
-            if (cin.fail())
-            {
-                throw runtime_error("Invalid input: Please enter an integer (Press Enter to continue)");
-            }
-            // error handle values < 0 or > reservationCount
-            else if (wantedDeleted < 0 || wantedDeleted > reservationCount)
-            {
-                throw out_of_range("Out of range. (Press Enter to continue)");
-            }
-            else if (wantedDeleted == 0)
+            auto userReservations = system.getByUser(user);
+
+            if (userReservations.empty()) {
+                cout << "No reservations to cancel.\n";
                 return;
-            else
-                system.removeReservation(userReservations[wantedDeleted - 1]);
+            }
+
+            int reservationCount = 0;
+            cout << "Which reservation do you want to cancel (Enter 0 to exit)\n";
+
+            for (const auto& res : userReservations)
+            {
+                cout << "Reservation #" << ++reservationCount << '\n';
+                cout << res;
+            }
+
+            cin >> wantedDeleted;
+
+            if (cin.fail())
+                throw runtime_error("Invalid input: enter a number.");
+
+            if (wantedDeleted < 0 || wantedDeleted > reservationCount)
+                throw out_of_range("Selection out of range.");
+
+            if (wantedDeleted == 0)
+                return;
+
+            system.removeReservation(userReservations[wantedDeleted - 1]);
+            cout << "Reservation canceled successfully.\n";
         }
-        catch (runtime_error& string)
+        catch (const runtime_error& e)
         {
             cin.clear();
-            cerr << "Error: " << string.what() << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cerr << "Error: " << e.what() << endl;
         }
-        catch (out_of_range& string)
+        catch (const out_of_range& e)
         {
-            cout << "Error: " << string.what() << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cerr << "Error: " << e.what() << endl;
         }
-
     }
 }
 
@@ -231,6 +194,7 @@ Resource* createResource(SmartCampusSystem& system)
 					if(!system.availableID(id))
                     {
                         throw runtime_error("This ID is already in use, please enter a different one");
+                        continue;
                     }
                 }
 
@@ -240,34 +204,40 @@ Resource* createResource(SmartCampusSystem& system)
                         << "Press enter to continue...";
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    continue;
                 }
+                break;
             }
 			
             cout << endl << "Enter the name of the resource: ";
             cin >> name;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             switch(option)
             {
                 case 1: 
-                    cout << endl << "Enter the tutor's name: ";
-                    getline(cin, tutorName);
                     cout << endl << "Enter the location of the tutoring session: ";
                     getline(cin, location);
-                    cout << endl << "Enter the hour of the day" 
+                    cout << endl << "Enter the tutor's name: ";
+                    getline(cin, tutorName);
+                    
+                    cout << endl << "Enter the hour " 
                     "the tutoring session starts (in military time): ";
                     cin >> start;
-                    cout << endl << "Enter the hour of the day"
+                    cout << endl << "Enter the hour "
                         "that the tutoring session ends (in military time): ";
                     cin >> end;
-                    hours = { start, end };
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    
+			        hours = {start, end};
                     tempResource = new TutoringSession(id, name, location, tutorName, hours);
                     return tempResource;
 					break;
                 case 2:
                     cout << endl << "Enter the location of the study room: ";
-                    cin >> location;
+                    getline(cin, location);
                     cout << endl << "Enter the capacity of the study room: ";
                     cin >> capacity;
-                    cout << endl << "Enter the hour that the study room"
+                    cout << endl << "Enter the hour that the study room "
                                     "opens (in military time): ";
                     cin >> start;
                     cout << endl << "Enter the hour that the study room "
@@ -284,21 +254,19 @@ Resource* createResource(SmartCampusSystem& system)
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     break;
             }
-
         }
-
-        
 
 		catch (runtime_error& string)
 		{
 			cin.clear();
 			cerr << "Error: " << string.what() << endl
-				<< "Press enter to continue...";
+				 << "Press enter to continue...";
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
     }
 }
-Resource* destroyResource(SmartCampusSystem& system)
+
+void destroyResource(SmartCampusSystem& system)
 {
     int id;
     system.getStorage()->printAll();
@@ -306,16 +274,16 @@ Resource* destroyResource(SmartCampusSystem& system)
     cin >> id;
     if(!system.availableID(id))
     {
-        for(auto& i : system.getStorage()->passAll())
+        for(int i = 0; i < system.getStorage()->passAll().size(); ++i)
         {
-            if(i->getId() == id) return i;
+            if(system.getStorage()->passAll()[i]->getId() == id) system.removeResources(system.getStorage()->passAll()[i]);
         }
     }
     else
     {
-        cout << "id not found.\n";
+        cout << "id not found.\n\n";
     }
-    return nullptr;
+    return;
 }
 
 void adminMenu(SmartCampusSystem& system){
@@ -326,7 +294,7 @@ void adminMenu(SmartCampusSystem& system){
              << "1. List resources\n"
              << "2. Add a resource\n"
              << "3. Remove a resource\n"
-             //<< "4. List reservations\n"
+             << "4. List all reservations\n"
              << "0. Exit\n"
              << "Your choice: ";
         cin >> option;
@@ -340,16 +308,15 @@ void adminMenu(SmartCampusSystem& system){
             case 2:
                 try
                 {
-                    system.getStorage()->addResource(createResource(system));
+                    system.addResource(createResource(system));
                 }
                 catch(runtime_error& string){
                     cout << "Error: " << string.what() << endl;
                 }
-
                 break;
             case 3:
                 std::system("cls");
-                system.getStorage()->removeResource(destroyResource(system));
+                destroyResource(system);
                 break;
             case 4:
                 std::system("cls");
@@ -375,7 +342,8 @@ void studentMenu(SmartCampusSystem& system, User* studentUser)
             << "1. List resources\n"
             << "2. Create reservation\n"
             << "3. Cancel reservation\n"
-            << "4. View reservations\n"
+            << "4. View upcoming reservations\n"
+            << "5. View all reservations\n"
             << "0. Exit\n"
             << "Choice: ";
         cin >> option;
@@ -393,6 +361,9 @@ void studentMenu(SmartCampusSystem& system, User* studentUser)
         case 4:
             viewReservationMenu(system, studentUser);
             break;
+        case 5:
+            system.getReservationList()->printAll();
+            break;
         case 0:
             return;
             break;
@@ -408,6 +379,7 @@ void createReservationMenu(SmartCampusSystem& system, User* studentUser)
     Dates dates;
     int resourceID;
     bool valid = false;
+    bool invalidID = true;
 
     time_t t = time(nullptr);
     tm now{};
@@ -426,9 +398,18 @@ void createReservationMenu(SmartCampusSystem& system, User* studentUser)
     {
         try
         {
-
+            while (invalidID)
+            {
             cout << "Resource ID: ";
             cin >> resourceID;
+            if (system.availableID(resourceID))
+                cout << "Unavailable\n\n\n";
+            else
+                invalidID = false;
+            }
+
+            // ERROR HANDLE THIS
+
             //asks for reservation dates n times
             cout << "START (month day year hour minute): ";
             cin >> dates.startMonth >> dates.startDay >> dates.startYear >> dates.startHour >> dates.startMinute;
@@ -437,7 +418,9 @@ void createReservationMenu(SmartCampusSystem& system, User* studentUser)
 
             if (cin.fail())
             {
-                throw runtime_error("Invalid input: Please enter only integers (Press Enter to continue)");
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw runtime_error("Invalid input: Please enter only integers");
             }
 
             wantedTime = dates.endMinute / 10000 + dates.endHour / 100 + dates.endDay
@@ -452,13 +435,13 @@ void createReservationMenu(SmartCampusSystem& system, User* studentUser)
             Reservation res(resourceID, studentUser->getUsername(), dates);
 
             // check if the Resource exists
-            if (system.availableID(resourceID))
+            if (!system.availableID(resourceID))
             {
                 // check if the availability hours match                             
                 if (dates.startHour < (system.getStorage())->getResource(resourceID)->getAvailability().first ||
-                    dates.endHour   >(system.getStorage())->getResource(resourceID)->getAvailability().second)
+                    dates.endHour   > (system.getStorage())->getResource(resourceID)->getAvailability().second)
                 {
-                    cout << "Invalid hours/n/n";
+                    cout << "Invalid hours\n\n";
                 }
                 else // hours are within the availability
                 {
@@ -468,16 +451,15 @@ void createReservationMenu(SmartCampusSystem& system, User* studentUser)
                         //create reservation object to give to system
                         system.getReservationList()->createReservation(res);
 
-                        cout << "Reservation Successfully added/n/n";
+                        cout << "Reservation Successfully added\n\n";
                         valid = true;
                     }
                 }
             }
             else // if resource does not exist
             {
-                cout << "Resource does not exist/n/n";
+                cout << "Resource does not exist\n\n";
             }
-
         }
 
         catch (range_error& string)

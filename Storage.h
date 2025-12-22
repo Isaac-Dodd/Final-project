@@ -10,11 +10,8 @@ private:
 	
 public:
 	Storage();
+	~Storage();
 	void printAll() const;
 	Resource* getResource(int id);
-	
-	//Admin Commands
-	void addResource(Resource* newResource);
-	void removeResource(Resource* removeResource);
-	vector<Resource*> passAll();
+	vector<Resource*>& passAll();
 };

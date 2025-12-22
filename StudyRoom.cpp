@@ -35,6 +35,14 @@ void StudyRoom::getResourceSpecifics() const
 		 << "Available Hours: " << hours.first << " to " << hours.second << endl;
 }
 
+
+string StudyRoom::getSaveSpecifics()
+{
+	return(location + "|" + to_string(capacity) + "|" /*+ "{" + to_string(getAvailability().first) + "," + to_string(getAvailability().second)
+		+ "}"*/);
+}
+//location|capacity|{9,17}
+
 string StudyRoom::getResourceType()
 {
 	return "StudyRoom";

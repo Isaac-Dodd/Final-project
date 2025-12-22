@@ -73,6 +73,7 @@ bool UserList::isInList(string name)
 
 UserList::~UserList()
 {
+    /*
     fstream myStream("User.txt", std::ios::out);
     if(!myStream.is_open())
         cout << "Could not open file for saving";
@@ -85,4 +86,6 @@ UserList::~UserList()
         }
         cout << "Data has been successfully saved to User.txt";
     }
+    myStream.close();
+    */
 }

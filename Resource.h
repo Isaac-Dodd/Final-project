@@ -31,6 +31,7 @@ public:
 	pair<int, int> getAvailability();
 	//bool isCheckedOut() const;
 	virtual void getResourceSpecifics() const = 0;
+	virtual string getSaveSpecifics() = 0;
 	virtual string getResourceType() = 0;
 	//virtual void setResourceType() = 0;
 	

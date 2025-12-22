@@ -13,6 +13,7 @@ class TutoringSession :public Resource
 		
 		string getResourceType();
 		void getResourceSpecifics() const;
+		string getSaveSpecifics();
 		//void setResourceSpecifics(string tutorName, );
 
 	private:

@@ -19,12 +19,11 @@ private:
 public:
     SmartCampusSystem();
 
-    void listResources() const;
     bool availableID(int wantedID);
 
     Storage* getStorage();
     ReservationList* getReservationList();
-
+    void takeID(int ID);
 
     //void printUserReservations(User currentStudent) const;
     //void printResourceReservations(int) const;
@@ -35,7 +34,8 @@ public:
     vector<Reservation> getByUser(User* user) const;
     //vector<Reservation> passAll() const;
 
-    void removeResources(int id);
+    void removeResources(Resource* removeResource);
+    void addResource(Resource* newResource);
     void removeReservation(Reservation wantRemoved);
     
     vector<Resource*> getAvailable();

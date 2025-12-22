@@ -171,6 +171,9 @@ ReservationList::~ReservationList()
 
 	for (auto indReservation : logByID)
 	{
+		if (indReservation.second.empty())
+			continue;
+
 		for (auto reservationData : indReservation.second)
 		{
 			// Need this to not add a \n to the end of the file

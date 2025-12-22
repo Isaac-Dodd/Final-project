@@ -4,7 +4,7 @@ Resource::Resource(int setID, string setName, pair<int, int> hours)
 {
 	id = setID;
 	name = setName;
-	hours = this->hours;
+	this->hours = hours;
 	//checkedOut = setChecked;
 }
 
