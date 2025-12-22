@@ -1,15 +1,6 @@
 #pragma once
 #include "Resource.h"
 
-/*
-* I would change the available hours to ints for the 
-* opening hour and minute, and the closing hour and
-* minute. Then a string for am and pm
-* 
-* I also never set up the virtual. I don't know what
-* you want outputted
-*/
-
 class StudyRoom : public Resource
 {
 	public:

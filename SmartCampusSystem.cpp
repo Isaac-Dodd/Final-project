@@ -2,8 +2,6 @@
 
 SmartCampusSystem::SmartCampusSystem()
 {
-	//currentReservations = ReservationList();
-    //currentStorage = Storage();
 
     for(auto& i : currentStorage.passAll())
     {
@@ -37,41 +35,6 @@ void SmartCampusSystem::removeReservation(Reservation wantRemoved)
 	currentReservations.cancelReservation(wantRemoved);
 }
 
-void SmartCampusSystem::takeID(int ID)
-{
-	usedIds[ID] = true;
-}
-
-//void SmartCampusSystem::printUserReservations(Student currentStudent) const
-//{
-//	vector<Reservation> studentsReservation;
-//	studentsReservation = currentReservations.getByUsername(currentStudent.getUsername());
-//
-//	if (!studentsReservation.empty())
-//	{
-//		for (auto reservation : studentsReservation)
-//		{
-//			Dates reservedTime = reservation.getResPeriod();
-//
-//			cout << reservation.getID() << endl;
-//			cout << "Start:\n";
-//			cout << reservedTime.startHour << ":" << reservedTime.startMinute
-//				<< " " << reservedTime.startMonth << '-' << reservedTime.startDay
-//				<< '-' << reservedTime.startYear << endl;
-//
-//
-//			cout << "Ends:\n";
-//			cout << reservedTime.endHour << ":" << reservedTime.endMinute
-//				<< " " << reservedTime.endMonth << '-' << reservedTime.endDay
-//				<< '-' << reservedTime.endYear << endl;
-//		}
-//	}
-//}
-
-//void SmartCampusSystem::printResourceReservations(int) const
-//{
-//
-//}
 
 vector<Reservation> SmartCampusSystem::getById(int id)
 {
@@ -83,9 +46,6 @@ vector<Reservation> SmartCampusSystem::getByUser(User* user) const
 	return(currentReservations.getByUsername(user->getUsername()));
 }
 
-//vector<Reservation> SmartCampusSystem::passAll() const;
-
-// Check in debugging
 Storage* SmartCampusSystem::getStorage()
 {
 	return &currentStorage;

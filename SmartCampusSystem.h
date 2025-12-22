@@ -21,24 +21,19 @@ public:
 
     bool availableID(int wantedID);
 
-    Storage* getStorage();
-    ReservationList* getReservationList();
-    void takeID(int ID);
 
-    //void printUserReservations(User currentStudent) const;
-    //void printResourceReservations(int) const;
-    //void printAvailable();
 
-    // Use of maps makes this impossible to make const
     vector<Reservation> getById(int);
     vector<Reservation> getByUser(User* user) const;
-    //vector<Reservation> passAll() const;
+
 
     void removeResources(Resource* removeResource);
     void addResource(Resource* newResource);
     void removeReservation(Reservation wantRemoved);
     
     vector<Resource*> getAvailable();
+    Storage* getStorage();
+    ReservationList* getReservationList();
     bool nonConflict(Reservation potentialRes);
 };
 

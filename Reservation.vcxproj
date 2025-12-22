@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="Admin.h" />
     <ClInclude Include="Dates.h" />
+    <ClInclude Include="MainFunctions.h" />
     <ClInclude Include="Reservation.h" />
     <ClInclude Include="ReservationList.h" />
     <ClInclude Include="Resource.h" />

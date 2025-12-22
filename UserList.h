@@ -7,13 +7,14 @@
 #include <fstream>
 class UserList
 {
-    public:
+public:
     UserList();
-    ~UserList(); //not sure if this needs to be virutal, check from Addressbook
+    ~UserList();
     string typeMatchingName(string username);
     User* pointerFromName(string username);
     bool isInList(string name); 
-    private:
+    
+private:
     vector<User*> allUsers;
 };
 
